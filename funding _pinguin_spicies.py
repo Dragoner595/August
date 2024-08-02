@@ -43,3 +43,25 @@ test_df = tfdf.keras.pd_dataframe_to_tf_dataset(test_data,label = 'species')
 
 model = tfdf.keras.RandomForestModel()
 model.fit(train_ds,verbose = 2)
+
+# Get an inspector to access models internals 
+# get opportunity to gutered information about the model and features influising its predictions  
+inspector = model.make_inspector()
+
+# Display feature importance 
+
+importance_types = inspector.variable_importances().keys()
+
+for importance_type in importance_types:
+ print('\n'+'='*30)
+ print(f'Importance Type:{importance_types}')
+ print('-'*30)
+ importances = inspector.variable_importances()[importance_type]
+ # sort importance in descending order based on importance values 
+ sorted_importance = sorted(importances,key=lambda x: x[1],reverse = True)
+
+ # Set up formating for consistant spacing in the output 
+ for feature , importance in sorted_importance:
+  # ensure the feature is treated as a string 
+  feature_name = feature.name if isinstance(feature,tfdf.py_tree.dataspec.SimpleColumnSpec) else feature 
+  print(f"{feature_name :20}{importance:.4f}")

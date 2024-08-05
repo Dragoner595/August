@@ -54,7 +54,7 @@ importance_types = inspector.variable_importances().keys()
 
 for importance_type in importance_types:
  print('\n'+'='*30)
- print(f'Importance Type:{importance_types}')
+ print(f'Importance Type:{importance_type}')
  print('-'*30)
  importances = inspector.variable_importances()[importance_type]
  # sort importance in descending order based on importance values 

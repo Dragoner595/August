@@ -70,7 +70,7 @@ for importance_type in importance_types:
 test_predictions = model.predict(test_df)
 predicted_labeles = np.argmax(test_predictions, axis = 1) # Conver probabilities to class labels 
 
-test_labeles  =test_data['species'].values # Extract actual data from teh test dataset 
+test_labeles  = test_data['species'].values # Extract actual data from the test dataset 
 
 # Compute accurace
 

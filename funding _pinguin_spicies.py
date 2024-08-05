@@ -65,3 +65,27 @@ for importance_type in importance_types:
   # ensure the feature is treated as a string 
   feature_name = feature.name if isinstance(feature,tfdf.py_tree.dataspec.SimpleColumnSpec) else feature 
   print(f"{feature_name :20}{importance:.4f}")
+
+# get prediction for the test data 
+test_predictions = model.predict(test_df)
+predicted_labeles = np.argmax(test_predictions, axis = 1) # Conver probabilities to class labels 
+
+test_labeles  =test_data['species'].values # Extract actual data from teh test dataset 
+
+# Compute accurace
+
+accuracy = accuracy_score(test_labeles,predicted_labeles)
+print(f'Accuracy: {accuracy:2f}')
+
+# Compute the confusion matrix 
+
+conf_matrix = confusion_matrix(test_labeles,predicted_labeles)
+print('\nConfusion Matrix')
+print(conf_matrix)
+
+# Calculate and print clasification report 
+
+species_names = special_encoder.classes_ # using label encoder to predict species names 
+
+report = classification_report(test_labeles,predicted_labeles,target_names=species_names)
+print(report)

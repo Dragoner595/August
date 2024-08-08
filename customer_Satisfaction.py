@@ -59,14 +59,16 @@ english_stopwords.extend(['im','its','youre','every','thing','cant','dont','does
 #print(english_stopwords)
 
 data['product_review_tokenized'] = data.product_review.apply(nltk.word_tokenize)
-#print(data.head(5))
+print(data.head(5))
 # in output we get some stop tokens so we will try to remvoe them 
 
-data['product_review_tokenized']= data.product_review_tokenized.drop(english_stopwords)
+#data['product_review_tokenized']= data['product_review_tokenized'].drop(english_stopwords)
 
 def remove_stopwords(tokens):
     return(x for x in tokens if x in english_stopwords)
 
-data['clean_tokens'] = data.product_review_tokenized.apply(remove_stopwords)
+data['cleaned_tokens'] = data.product_review_tokenized.apply(remove_stopwords)
+
+data['product_review_cleaned'] = data.cleaned_tokens.apply(lambda x: " ".join(x))
 
 print(data)

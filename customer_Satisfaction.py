@@ -59,7 +59,7 @@ english_stopwords.extend(['im','its','youre','every','thing','cant','dont','does
 #print(english_stopwords)
 
 data['product_review_tokenized'] = data.product_review.apply(nltk.word_tokenize)
-print(data.head(5))
+print(data.info())
 # in output we get some stop tokens so we will try to remvoe them 
 
 #data['product_review_tokenized']= data['product_review_tokenized'].drop(english_stopwords)
@@ -72,3 +72,28 @@ data['cleaned_tokens'] = data.product_review_tokenized.apply(remove_stopwords)
 data['product_review_cleaned'] = data.cleaned_tokens.apply(lambda x: " ".join(x))
 
 print(data)
+
+data.product_category.value_counts()
+
+
+# Filter the DataFrame to get rows where 'product_category' is 'Tops'
+data_tops = data[data['product_category'] == 'Tops']
+
+#print(data)
+#print(data_tops.head(5))
+# Access the 'cleaned_tokens' column from the filtered data
+# Flatten the 'cleaned_tokens' list for 'Tops' category
+
+tops_tokens = [token for sublist in data_tops['cleaned_tokens'].tolist() for token in sublist]
+
+# Flatten the 'product_review_tokenized' list for 'Tops' category
+down_tokens = [token for sublist in data_tops['product_review_tokenized'].tolist() for token in sublist]
+
+
+freq_dist = FreqDist(tops_tokens)
+freq_dist_down = FreqDist(down_tokens)
+
+#print(freq_dist.most_common(20))
+
+print(freq_dist_down.most_common(20))
+

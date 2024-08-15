@@ -57,3 +57,19 @@ freq_dist_down = FreqDist(down_tokens)
 # Print most common tokens
 print(freq_dist.most_common(20))
 print(freq_dist_down.most_common(20))
+
+print(nltk.pos_tag(data.product_review_tokenized[0]))
+nltk.dowload('tagsets')
+nltk.help.upenn_tagset()
+
+def extract_adj(tokens):
+    adjectives = []
+    for x in tokens:
+        if x[1] in ['JJ','JJR','JJS']:
+            adjectives.append(x[0])
+    return adjectives
+
+data['adjectives'] = data.POS_tokens.apply(extract_adj)
+
+print(data.head())
+

@@ -5,7 +5,7 @@ import nltk
 # Importing NLTK resources
 nltk.download('stopwords')
 nltk.download('punkt')
-nltk.download('average_perceptron_tagger')
+nltk.download('averaged_perceptron_tagger')
 nltk.download('vader_lexicon')
 
 from nltk.corpus import stopwords
@@ -38,9 +38,6 @@ data['cleaned_tokens'] = data['product_review_tokenized'].apply(remove_stopwords
 # Convert cleaned tokens back to a single string if needed for further processing
 data['product_review_cleaned'] = data['cleaned_tokens'].apply(lambda x: " ".join(x))
 
-print(data.info())
-print(data.head())
-
 # Filter the DataFrame to get rows where 'product_category' is 'Tops'
 data_tops = data[data['product_category'] == 'Tops']
 
@@ -58,18 +55,79 @@ freq_dist_down = FreqDist(down_tokens)
 print(freq_dist.most_common(20))
 print(freq_dist_down.most_common(20))
 
-print(nltk.pos_tag(data.product_review_tokenized[0]))
-nltk.dowload('tagsets')
-nltk.help.upenn_tagset()
+#print(nltk.pos_tag(data.product_review_tokenized[0]))
 
-def extract_adj(tokens):
+nltk.download('averaged_perceptron_tagger')
+nltk.download('tagsets')
+
+data['POS_tokens'] = data.product_review_tokenized.apply(nltk.pos_tag)
+
+def extaract_adj(tokens):
     adjectives = []
     for x in tokens:
         if x[1] in ['JJ','JJR','JJS']:
             adjectives.append(x[0])
     return adjectives
 
-data['adjectives'] = data.POS_tokens.apply(extract_adj)
+data['adjectives'] = data.POS_tokens.apply(extaract_adj)
 
 print(data.head())
 
+
+adj_tops = ''
+
+for x in data[data.product_category == 'Tops'].adjectives:
+    adj_tops += ' '.join(x) + ' '
+
+print(adj_tops)
+
+word_cloud = WordCloud(width = 800, height = 600 , background_color = 'white').generate(adj_tops)
+
+#def visualization_adjectives(category):
+    #adjectives = ""
+
+    #for x in data[data.product_category == category].adjectives:
+       #adjectives += "".join() + " "
+
+    #word_cloud = WordCloud(width = 800 , height = 600 , background_color= 'white').generate(adjectives)
+    #plt.imshow(word_cloud)
+    #plt.axis('off')
+    #plt.show()
+
+#visualization_adjectives('Jackets')
+
+sent = SentimentIntensityAnalyzer()
+review = data.product_review_cleaned[0]
+print(review)
+
+scores = sent.polarity_scores(review)
+print(scores)
+
+# POS: The probability of positive sentiment 
+# Neu: The probability of neutral sentiment 
+# Neg The probability of negative sentiment 
+# compound: The normalized compound score that takes values from -1 to 1 
+
+# we can use the compound score to find sentiment of each review 
+# if compound score >= 0.05 then positive 
+# if compound score >= -0.05 and 0.05 then neutral 
+# if compound score <= -0.05 then negative 
+
+def polarity_score(review):
+    # Initilizing the sentiment Analyzer 
+    sent = SentimentIntensityAnalyzer()
+
+    # Extracting the sentiment polarity  scores of a review 
+    score = sent.polarity_scores(review)
+
+    #Getting the compound score
+    compound = scores['compound']
+
+    if compound > 0.05:
+        return 'positive'
+    elif compound < -0.5:
+        return 'negative'
+    else:
+        return 'neutral'
+    
+print(polarity_score("This product is amazing the qality is really good"))

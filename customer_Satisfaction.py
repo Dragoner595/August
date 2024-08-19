@@ -131,3 +131,10 @@ def polarity_score(review):
         return 'neutral'
     
 print(polarity_score("This product is amazing the qality is really good"))
+data['sentiment'] = data.product_review_cleaned.apply(polarity_score)
+
+print(data.head(5))
+df = data.groupby(['product_category', 'sentiment']).size().reset_index(name='counts')
+
+px.bar(df,x = 'product_category', y = 'counts', color = 'sentiment' , barmode = 'group')
+

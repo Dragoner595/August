@@ -28,13 +28,14 @@ data.product_review = data.product_review.str.translate(str.maketrans('', '', st
 data['product_review_tokenized'] = data.product_review.apply(nltk.word_tokenize)
 
 # Removing stopwords
+
 english_stopwords = set(stopwords.words('english'))
 
 def remove_stopwords(tokens):
     return [word for word in tokens if word.lower() not in english_stopwords]
 
 data['cleaned_tokens'] = data['product_review_tokenized'].apply(remove_stopwords)
-
+print(data.head(5))
 # Convert cleaned tokens back to a single string if needed for further processing
 data['product_review_cleaned'] = data['cleaned_tokens'].apply(lambda x: " ".join(x))
 
@@ -52,6 +53,7 @@ freq_dist = FreqDist(tops_tokens)
 freq_dist_down = FreqDist(down_tokens)
 
 # Print most common tokens
+
 print(freq_dist.most_common(20))
 print(freq_dist_down.most_common(20))
 

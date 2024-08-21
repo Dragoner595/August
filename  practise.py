@@ -61,4 +61,3 @@ data['POS_tokens'] = data.tokens.apply(nltk.pos_tag)
 
 data['adjectives'] = data.POS_tokens.apply(lambda x: [token for token , tag in x if tag == 'JJ'])
 
-

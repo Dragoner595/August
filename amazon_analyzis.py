@@ -1,7 +1,6 @@
 import pandas as pd 
 import numpy as np 
 
-
 data = pd.read_csv('/workspaces/August/data/amazon_reviews.csv')
 
 data = data.drop(['date'],axis = 1)

@@ -35,11 +35,14 @@ def remove_stopwords(tokens):
     return [word for word in tokens if word.lower() not in english_stopwords]
 
 data['cleaned_tokens'] = data['product_review_tokenized'].apply(remove_stopwords)
+
 print(data.head(5))
+
 # Convert cleaned tokens back to a single string if needed for further processing
 data['product_review_cleaned'] = data['cleaned_tokens'].apply(lambda x: " ".join(x))
 
 # Filter the DataFrame to get rows where 'product_category' is 'Tops'
+
 data_tops = data[data['product_category'] == 'Tops']
 
 # Flatten the 'cleaned_tokens' list for 'Tops' category
@@ -133,10 +136,7 @@ def polarity_score(review):
         return 'neutral'
     
 print(polarity_score("This product is amazing the qality is really good"))
+
 data['sentiment'] = data.product_review_cleaned.apply(polarity_score)
 
-print(data.head(5))
-df = data.groupby(['product_category', 'sentiment']).size().reset_index(name='counts')
-
-px.bar(df,x = 'product_category', y = 'counts', color = 'sentiment' , barmode = 'group')
 

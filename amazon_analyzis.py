@@ -103,7 +103,7 @@ from sklearn.metrics import classification_report, confusion_matrix
 
 y_predict_test = NB_classifier.predict(X_test)
 
-cm = comfusion_matrix(y_test,y_predict_test)
+cm = confusion_matrix(y_test,y_predict_test)
 
 sns.heatmap(cm,annot = True)
 
